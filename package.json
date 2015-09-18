@@ -16,7 +16,8 @@
     "url": "https://github.com/sebastiankr/sailbot/issues"
   },
   "homepage": "https://github.com/sebastiankr/sailbot#readme",
-  "dependencies": {
-    "gulp": "^3.9.0"
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "typescript": "Microsoft/TypeScript"
   }
 }
