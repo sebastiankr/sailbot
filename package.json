@@ -17,7 +17,22 @@
   },
   "homepage": "https://github.com/sebastiankr/sailbot#readme",
   "devDependencies": {
+    "babelify": "^6.3.0",
+    "browser-sync": "^2.9.4",
+    "browserify": "^11.1.0",
     "gulp": "^3.9.0",
-    "typescript": "Microsoft/TypeScript"
+    "gulp-notify": "^2.2.0",
+    "gulp-util": "^3.0.6",
+    "pretty-hrtime": "^1.0.0",
+    "require-dir": "^0.3.0",
+    "typescript": "Microsoft/TypeScript",
+    "underscore": "^1.8.3",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  },
+  "dependencies": {
+    "material-ui": "^0.11.1",
+    "react": "^0.13.3",
+    "react-tap-event-plugin": "^0.1.7"
   }
 }
