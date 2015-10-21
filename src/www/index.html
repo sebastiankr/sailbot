@@ -8,9 +8,16 @@
   <meta name="description" content="Google's material design UI components built with React.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="main.css">
+  
+  <script src="js/webcomponents-lite.js"></script>
+  
+  <link rel="import" href="elements.build.html">
+  <style is="custom-style" include="shared-styles"></style>
 </head>
 
 <body>
+  <span id="browser-sync-binding"></span>
+  <div id="reactapp"></div>
   <!-- This script adds the Roboto font to our project. For more detail go to this site:  http://www.google.com/fonts#UsePlace:use/Collection:Roboto:400,300,500 -->
   <script>
     var WebFontConfig = {
@@ -26,6 +33,7 @@
       s.parentNode.insertBefore(wf, s);
     })();
   </script>
+  <script src="polymer.js"></script>
   <script src="app.js"></script>
 </body>
 
