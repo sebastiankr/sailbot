@@ -12,7 +12,17 @@ declare module __mui {
         label: string;
         key?: number; // I think this prop is unnecessary, but unless it an error occurs in tsc.
     }
+    
     class RaisedButton extends __React.Component<IRaisedButtonProps, ITodoItemState> {
+        render(): __React.ReactElement<any>;
+    }
+    
+    interface IAppBarProps {
+        title: string;
+        iconClassNameRight?: string;
+    }   
+    
+    class AppBar extends __React.Component<IAppBarProps, ITodoItemState> {
         render(): __React.ReactElement<any>;
     }
 

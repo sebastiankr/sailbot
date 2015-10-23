@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {TodoItem} from './todoItem';
-import {RaisedButton} from 'material-ui';
+import {RaisedButton, AppBar} from 'material-ui';
 //import {Polymer} from 'polymerr';
 
 declare namespace JSX {
@@ -23,19 +23,19 @@ export interface IMainState {
     todoList?: ITodo[];
 }
 
-export interface IMainProps {}
+export interface IMainProps { }
 
 export class Main extends React.Component<IMainProps, IMainState> {
-    state: IMainState = {newItem: {description: ''}, todoList: []};
+    state: IMainState = { newItem: { description: '' }, todoList: [] };
 
-    constructor () {
+    constructor() {
         super();
         this.changeName = this.changeName.bind(this);
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
     }
 
-    changeName (e: any) {
+    changeName(e: any) {
         this.setState({
             newItem: {
                 description: e.target.value
@@ -43,7 +43,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
         });
     }
 
-    addItem () {
+    addItem() {
         var list = this.state.todoList;
         list.push({
             description: this.state.newItem.description,
@@ -51,28 +51,23 @@ export class Main extends React.Component<IMainProps, IMainState> {
         });
         this.setState({
             todoList: list,
-            newItem: {description: ''}
+            newItem: { description: '' }
         });
     }
 
-    removeItem (item: ITodo) {
+    removeItem(item: ITodo) {
         var list = this.state.todoList.filter(i => i.key !== item.key);
-        this.setState({todoList: list});
+        this.setState({ todoList: list });
     }
 
-    render () {
+    render() {
         var todoItems = this.state.todoList.map(item => {
             return <TodoItem key={item.key} item={item} onRemove={this.removeItem} ></TodoItem>;
         });
         return (
-            
             <div>
-         
-               <paper-drawer-panel>
-  <div data-drawer> Drawer panel... </div>
-  <div data-main> xvxdf </div>
-</paper-drawer-panel>
-    
+                <AppBar title="Title3" iconClassNameRight="muidocs-icon-navigation-expand-more" />
+                <RaisedButton label="Default" />
             </div>
         );
     }
@@ -84,7 +79,10 @@ export class Main extends React.Component<IMainProps, IMainState> {
                 //      <paper-material elevation="1">inside</paper-material>
                 // </div>
                 // <ul>{todoItems}</ul>
-
+//                <paper-drawer-panel>
+//   <div data-drawer> Drawer panel... </div>
+//   <div data-main> xvxdf </div>
+//                    </paper-drawer-panel>
 
 //  
 
