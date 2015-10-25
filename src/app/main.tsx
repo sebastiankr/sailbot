@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {TodoItem} from './todoItem';
-import {RaisedButton, AppBar} from 'material-ui';
+import {RaisedButton, AppBar, LeftNav, MenuItem} from 'material-ui';
 //import {Polymer} from 'polymerr';
 
 declare namespace JSX {
@@ -61,14 +61,25 @@ export class Main extends React.Component<IMainProps, IMainState> {
     }
 
     render() {
+        var menuItems = [
+            { route: 'get-started', text: 'Get Started' },
+            { route: 'customization', text: 'Customization' },
+            { route: 'components', text: 'Components' }
+        ];
+
         var todoItems = this.state.todoList.map(item => {
             return <TodoItem key={item.key} item={item} onRemove={this.removeItem} ></TodoItem>;
         });
         return (
             <div>
-                <AppBar title="Title3" iconClassNameRight="muidocs-icon-navigation-expand-more" />
+            <LeftNav
+                ref="leftNav"
+                docked={true}
+                menuItems={menuItems} />
+                
+                <AppBar title="Title6" iconClassNameRight="muidocs-icon-navigation-expand-more" />
                 <RaisedButton label="Default" />
-            </div>
+                </div>
         );
     }
 }

@@ -12,4 +12,6 @@ gulp.task('browserSync', function () {
       port: 5001
     }
   });
+  gulp.watch(config.dest + '/**/*').on('change', browserSync.reload);
+  
 });
