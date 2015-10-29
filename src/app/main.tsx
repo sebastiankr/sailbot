@@ -1,159 +1,138 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-import * as React from 'react';
-import {TodoItem} from './todoItem';
-import {RaisedButton, AppBar, LeftNav, MenuItem} from 'material-ui';
-//import {Polymer} from 'polymerr';
+import * as React from 'react'
+import { render } from 'react-dom'
+import { Router, Route, Link, History } from 'react-router'
+import { createHistory, useBasename } from 'history'
+import auth from './auth'
 
-declare namespace JSX {
-    interface IntrinsicElements {
-        foo: any;
+const history = useBasename(createHistory)({
+  basename: '/auth-flow'
+})
+
+const App = React.createClass({
+  getInitialState() {
+    return {
+      loggedIn: auth.loggedIn()
     }
+  },
+
+  updateAuth(loggedIn) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  },
+
+  componentWillMount() {
+    auth.onChange = this.updateAuth
+    auth.login()
+  },
+
+  render() {
+    return (
+      <div>
+        <ul>
+          <li>
+            {this.state.loggedIn ? (
+              <Link to="/logout">Log out</Link>
+            ) : (
+              <Link to="/login">Sign in</Link>
+            )}
+          </li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/dashboard">Dashboard</Link> (authenticated)</li>
+        </ul>
+        {this.props.children}
+      </div>
+    )
+  }
+})
+
+const Dashboard = React.createClass({
+  render() {
+    const token = auth.getToken()
+
+    return (
+      <div>
+        <h1>Dashboard</h1>
+        <p>You made it!</p>
+        <p>{token}</p>
+      </div>
+    )
+  }
+})
+
+const Login = React.createClass({
+  mixins: [ History ],
+
+  getInitialState() {
+    return {
+      error: false
+    }
+  },
+
+  handleSubmit(event) {
+    event.preventDefault()
+
+    const email = this.refs.email.value
+    const pass = this.refs.pass.value
+
+    auth.login(email, pass, (loggedIn) => {
+      if (!loggedIn)
+        return this.setState({ error: true })
+
+      const { location } = this.props
+
+      if (location.state && location.state.nextPathname) {
+        this.history.replaceState(null, location.state.nextPathname)
+      } else {
+        this.history.replaceState(null, '/about')
+      }
+    })
+  },
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label><input ref="email" placeholder="email" defaultValue="joe@example.com" /></label>
+        <label><input ref="pass" placeholder="password" /></label> (hint: password1)<br />
+        <button type="submit">login</button>
+        {this.state.error && (
+          <p>Bad login information</p>
+        )}
+      </form>
+    )
+  }
+})
+
+const About = React.createClass({
+  render() {
+    return <h1>About</h1>
+  }
+})
+
+const Logout = React.createClass({
+  componentDidMount() {
+    auth.logout()
+  },
+
+  render() {
+    return <p>You are now logged out</p>
+  }
+})
+
+function requireAuth(nextState, replaceState) {
+  if (!auth.loggedIn())
+    replaceState({ nextPathname: nextState.location.pathname }, '/login')
 }
 
-interface ITodo {
-    description: string;
-    key: number;
-}
-
-export interface IMainState {
-    newItem?: {
-        description: string;
-    };
-    todoList?: ITodo[];
-}
-
-export interface IMainProps { }
-
-export class Main extends React.Component<IMainProps, IMainState> {
-    state: IMainState = { newItem: { description: '' }, todoList: [] };
-
-    constructor() {
-        super();
-        this.changeName = this.changeName.bind(this);
-        this.addItem = this.addItem.bind(this);
-        this.removeItem = this.removeItem.bind(this);
-    }
-
-    changeName(e: any) {
-        this.setState({
-            newItem: {
-                description: e.target.value
-            }
-        });
-    }
-
-    addItem() {
-        var list = this.state.todoList;
-        list.push({
-            description: this.state.newItem.description,
-            key: new Date().getTime()
-        });
-        this.setState({
-            todoList: list,
-            newItem: { description: '' }
-        });
-    }
-
-    removeItem(item: ITodo) {
-        var list = this.state.todoList.filter(i => i.key !== item.key);
-        this.setState({ todoList: list });
-    }
-
-    render() {
-        var menuItems = [
-            { route: 'get-started', text: 'Get Started' },
-            { route: 'customization', text: 'Customization' },
-            { route: 'components', text: 'Components' }
-        ];
-
-        var todoItems = this.state.todoList.map(item => {
-            return <TodoItem key={item.key} item={item} onRemove={this.removeItem} ></TodoItem>;
-        });
-        return (
-            <div>
-            <LeftNav
-                ref="leftNav"
-                docked={true}
-                menuItems={menuItems} />
-                
-                <AppBar title="Title6" iconClassNameRight="muidocs-icon-navigation-expand-more" />
-                <RaisedButton label="Default" />
-                </div>
-        );
-    }
-}
-                // <div classNameName="layout horizontal wrap">
-                //     <input type="text" placeholder="input new item" value={this.state.newItem.description} onChange={this.changeName} />
-                //     <button onClick={this.addItem} >add</button>
-                //      <RaisedButton label="Super Secret Password" />
-                //      <paper-material elevation="1">inside</paper-material>
-                // </div>
-                // <ul>{todoItems}</ul>
-//                <paper-drawer-panel>
-//   <div data-drawer> Drawer panel... </div>
-//   <div data-main> xvxdf </div>
-//                    </paper-drawer-panel>
-
-//  
-
-
-//     <paper-drawer-panel id="paperDrawerPanel">
-     
-//       <paper-scroll-header-panel drawer fixed>
-
-
-//         <paper-toolbar id="drawerToolbar">
-//           <span className="paper-font-title">Menu</span>
-//         </paper-toolbar>
-
-//         <paper-menu className="list" attr-for-selected="data-route" selected="[[route]]">
-//           <a data-route="home" href="/" on-click="onDataRouteClick">
-//             <iron-icon icon="home"></iron-icon>
-//             <span>Home</span>
-//           </a>
-
-//           <a data-route="users" href="/users" on-click="onDataRouteClick">
-//             <iron-icon icon="info"></iron-icon>
-//             <span>Users</span>
-//           </a>
-
-//           <a data-route="contact" href="/contact" on-click="onDataRouteClick">
-//             <iron-icon icon="mail"></iron-icon>
-//             <span>Contact</span>
-//           </a>
-//         </paper-menu>
-//       </paper-scroll-header-panel>
-
-//       <paper-scroll-header-panel main condenses keep-condensed-header>
-
-
-//         <paper-toolbar id="mainToolbar" classNameName="tall">
-//           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-//           <span className="flex"></span>
-
-
-//           <paper-icon-button icon="refresh"></paper-icon-button>
-//           <paper-icon-button icon="search"></paper-icon-button>
-
-    
-//           <div className="middle middle-container center horizontal layout">
-//             <div className="app-name">Polymer Starter Kit</div>
-//           </div>
-
-     
-//           <div className="bottom bottom-container center horizontal layout">
-//             <div className="bottom-title paper-font-subhead">The future of the web today</div>
-//           </div>
-
-//         </paper-toolbar>
-
-   
-//         <div className="content">
-        
-//           <p>test</p>
-          
-//         </div>
-//       </paper-scroll-header-panel>
-//     </paper-drawer-panel>
-        
+render((
+  <Router history={history}>
+    <Route path="/" component={App}>
+      <Route path="login" component={Login} />
+      <Route path="logout" component={Logout} />
+      <Route path="about" component={About} />
+      <Route path="dashboard" component={Dashboard} onEnter={requireAuth} />
+    </Route>
+  </Router>
+), document.getElementById('example'))

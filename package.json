@@ -38,6 +38,7 @@
     "watchify": "^3.4.0"
   },
   "dependencies": {
+    "history": "^1.13.0",
     "material-ui": "^0.12.4",
     "react": "^0.14.0",
     "react-addons-create-fragment": "^0.14.0",
@@ -45,6 +46,7 @@
     "react-addons-transition-group": "^0.14.0",
     "react-addons-update": "^0.14.0",
     "react-dom": "^0.14.0",
+    "react-router": "^1.0.0-rc3",
     "react-tap-event-plugin": "^0.2.1"
   }
 }

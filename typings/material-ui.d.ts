@@ -1,7 +1,7 @@
 /// <reference path="react/react.d.ts" />
 
 declare module __mui {
-
+    import React = __React;
     interface ITodo {
         description: string;
     }
@@ -48,6 +48,8 @@ declare module __mui {
     class MenuItem extends __React.Component<IMenuItemProps, ITodoItemState> {
         render(): __React.ReactElement<any>;
     }
+    
+
 }
 
 declare module "material-ui" {
